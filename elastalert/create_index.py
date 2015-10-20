@@ -11,7 +11,7 @@ import yaml
 from elasticsearch.client import Elasticsearch
 
 def main(in_args=None):
-    parser = argparse.ArgumentParser(in_args)
+    parser = argparse.ArgumentParser()
     parser.add_argument('--host', help='Elasticsearch host')
     parser.add_argument('--port', type=int, help='Elasticsearch port')
     parser.add_argument('--url-prefix', help='Elasticsearch URL prefix')
@@ -20,7 +20,7 @@ def main(in_args=None):
     parser.add_argument('--no-ssl', dest='ssl', action='store_false', help='Do not use SSL')
     parser.add_argument('--index', help='Index name to create')
     parser.add_argument('--old-index', help='Old index name to copy')
-    args = parser.parse_args()
+    args = parser.parse_args(in_args)
 
     if os.path.isfile('../config.yaml'):
         filename = '../config.yaml'
