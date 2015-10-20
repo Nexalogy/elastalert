@@ -73,13 +73,10 @@ def main(in_args=None):
     if not index:
         index = 'elastalert_status'
 
-#   old_index = (args.old_index if args.old_index is not None
-#                 else raw_input('Name of existing index to copy? (Default None) '))
-
     res = None
-    if old_index:
+    if args.old_index:
         print('Downloading existing data...')
-        res = es.search(index=old_index, body={}, size=500000)
+        res = es.search(index=args.old_index, body={}, size=500000)
         print('Got %s documents' % (len(res['hits']['hits'])))
 
     es.indices.create(index)
