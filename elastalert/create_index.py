@@ -10,9 +10,8 @@ import argparse
 import yaml
 from elasticsearch.client import Elasticsearch
 
-
-def main():
-    parser = argparse.ArgumentParser()
+def main(in_args=None):
+    parser = argparse.ArgumentParser(in_args)
     parser.add_argument('--host', help='Elasticsearch host')
     parser.add_argument('--port', type=int, help='Elasticsearch port')
     parser.add_argument('--url-prefix', help='Elasticsearch URL prefix')
@@ -99,4 +98,4 @@ def main():
     print('Done!')
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main(sys.argv[1:]))
