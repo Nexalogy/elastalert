@@ -68,12 +68,14 @@ class ElastAlerter():
         self.debug = self.args.debug
         self.verbose = self.args.verbose
 
-        if self.debug:
-            self.verbose = True
-
         if self.verbose:
             elastalert_logger.setLevel(logging.INFO)
-            elastalert_logger.addHandler(logging.StreamHandler(sys.stdout))
+            #elastalert_logger.addHandler(logging.StreamHandler(sys.stdout))
+
+        if self.debug:
+            elastalert_logger.setLevel(logging.DEBUG)
+            self.verbose = True
+
 
         if not self.args.es_debug:
             logging.getLogger('elasticsearch').setLevel(logging.WARNING)
@@ -256,7 +258,8 @@ class ElastAlerter():
             extra_args = {}
         try:
             res = self.current_es.search(index=index, size=self.max_query_size, body=query, ignore_unavailable=True, **extra_args)
-            logging.debug(str(res))
+            elastalert_logger.info(query)
+            elastalert_logger.info(str(res))
         except ElasticsearchException as e:
             # Elasticsearch sometimes gives us GIGANTIC error messages
             # (so big that they will fill the entire terminal buffer)
