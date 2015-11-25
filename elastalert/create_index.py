@@ -20,9 +20,13 @@ def main(in_args=None):
     parser.add_argument('--no-ssl', dest='ssl', action='store_false', help='Do not use SSL')
     parser.add_argument('--index', help='Index name to create')
     parser.add_argument('--old-index', help='Old index name to copy')
+    parser.add_argument('--config', help='Config file name')
+
     args = parser.parse_args(in_args)
 
-    if os.path.isfile('../config.yaml'):
+    if args.config:
+        filename = args.config
+    elif os.path.isfile('../config.yaml'):
         filename = '../config.yaml'
     elif os.path.isfile('config.yaml'):
         filename = 'config.yaml'
