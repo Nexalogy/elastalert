@@ -209,10 +209,30 @@ class FrequencyRule(RuleType):
         # Match if, after removing old events, we hit num_events
         if self.occurrences[key].count() >= self.rules['num_events']:
             event = self.occurrences[key].data[-1][0]
-            if self.attach_related:
-                event['related_events'] = [data[0] for data in self.occurrences[key].data[:-1]]
             self.add_match(event)
             self.occurrences.pop(key)
+
+    def add_match(self, event):
+        """ This function is called on all matching events. This rule uses it
+        to add events related to the matched event, if requested by
+        configuration of the rule (related_events flag)
+
+        :param event: The matching event, a dictionary of terms.
+        """
+        # Convert datetime's back to timestamps
+        ts = self.rules.get('timestamp_field')
+        if ts in event:
+            event[ts] = dt_to_ts(event[ts])
+
+        if self.attach_related and len(self.matches):
+            # we need to add related events, and matches array already
+            # has a field - then add a given event into related_events array
+            if not self.matches[0].get('related_events'):
+                self.matches[0]['related_events'] = []
+
+            self.matches[0]['related_events'].append(event)
+        else:
+            self.matches.append(event)
 
     def garbage_collect(self, timestamp):
         """ Remove all occurrence data that is beyond the timeframe away """
